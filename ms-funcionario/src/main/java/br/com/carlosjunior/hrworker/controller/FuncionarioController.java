@@ -2,9 +2,10 @@ package br.com.carlosjunior.hrworker.controller;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,11 @@ import br.com.carlosjunior.hrworker.repositories.FuncionarioRepository;
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
 	
+	private static Logger logger = LoggerFactory.getLogger(FuncionarioController.class);
+	
+	@Autowired
+	private Environment env;
+	
 	@Autowired
 	private FuncionarioRepository funcionarioRepository;
 	
@@ -29,6 +35,8 @@ public class FuncionarioController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Funcionario> findById(@PathVariable Long id){
+		logger.info("Porta: " + env.getProperty("local.server.port"));
+		
 		Funcionario funcionario = funcionarioRepository.findById(id).get();
 		return ResponseEntity.ok(funcionario);
 	}
